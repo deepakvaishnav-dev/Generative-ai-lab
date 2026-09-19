@@ -1,0 +1,45 @@
+import sys
+from langchain_core.documents import Document
+from langchain_community.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_classic.retrievers.multi_query import MultiQueryRetriever
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
+
+# Ensure UTF-8 terminal encoding on Windows
+sys.stdout.reconfigure(encoding='utf-8')
+
+load_dotenv()
+
+docs = [
+    Document(page_content="Gradient descent is an optimization algorithm used in machine learning."),
+    Document(page_content="Gradient descent minimizes the loss function."),
+    Document(page_content="Gradient descent is an optimization that minimizes the loss function."),
+    Document(page_content="Neural networks use gradient descent for training."),
+    Document(page_content="Support Vector Machines are supervised learning algorithms.")
+]
+
+
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+
+vectorstore = Chroma.from_documents(docs, embeddings)
+
+retriever = vectorstore.as_retriever()
+
+
+llm = ChatGroq(model="qwen/qwen3.8-27b")
+
+multi_query_retriever = MultiQueryRetriever.from_llm(
+    retriever=retriever,
+    llm=llm
+)
+
+query = "What is gradient descent?"
+
+docs = multi_query_retriever.invoke(query)
+
+
+print("\nRetrieved Documents:\n")
+
+for doc in docs:
+    print(doc.page_content)

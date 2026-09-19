@@ -1,0 +1,35 @@
+# LangChain / Generative AI Learning
+langchain
+langchain-core
+langchain-community
+
+# LLM Providers
+langchain-openai
+langchain-mistralai
+openai
+mistralai
+
+# Vector Database
+chromadb
+
+# Embedding Models
+sentence-transformers
+
+# Document Loading / Web Scraping
+beautifulsoup4
+lxml
+pypdf
+
+# Text Processing
+tiktoken
+
+# Environment Variables
+python-dotenv
+
+# Data Handling
+pandas
+numpy
+
+# API / App Layer
+fastapi
+uvicorn
